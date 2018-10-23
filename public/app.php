@@ -26,5 +26,6 @@ $HTTP_COOKIE_VARS = $_COOKIE;
 chdir(SCRIPTS_DIR);
 
 ini_set('error_reporting', E_ALL & ~E_STRICT & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED);
+header('Content-Type: text/html; charset=utf-8');
 
 require SCRIPTS_DIR.$targetFile;
