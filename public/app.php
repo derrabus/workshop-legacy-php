@@ -1,5 +1,7 @@
 <?php
 
+require dirname(__DIR__).'/vendor/autoload.php';
+
 define('SCRIPTS_DIR', dirname(__DIR__).'/scripts');
 
 $targetFile = empty($_SERVER['REDIRECT_URL']) ? '/index.php' : $_SERVER['REDIRECT_URL'];

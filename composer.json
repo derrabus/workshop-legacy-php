@@ -1,0 +1,21 @@
+{
+    "name": "derrabus/workshop-legacy-php",
+    "type": "project",
+    "description": "A business directory.",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Alexander M. Turek",
+            "email": "me@derrabus.de"
+        }
+    ],
+    "require": {
+        "php": "^5.5.9"
+    },
+    "config": {
+        "platform": {
+            "php": "5.5.9"
+        },
+        "sort-packages": true
+    }
+}
