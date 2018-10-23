@@ -1,5 +1,4 @@
 <?php
-require_once('DB.php');
 
 // database connection setup section
 
