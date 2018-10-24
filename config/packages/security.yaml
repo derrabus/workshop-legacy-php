@@ -4,6 +4,11 @@ security:
             entity:
                 class: App\Entity\User
                 property: username
+
+    encoders:
+        App\Entity\User:
+            id: App\Security\LegacyEncoder
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -11,11 +16,11 @@ security:
         main:
             anonymous: true
 
-            stateless: true
-
-            guard:
-                authenticators:
-                    - App\Security\LegacyAuthenticator
+            form_login:
+                login_path: login
+                check_path: login
+            logout:
+                path: logout
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER

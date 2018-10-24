@@ -15,9 +15,9 @@
             <div>
                 {% if app.user %}
                     <span class="navbar-text mx-3">👨‍💻 {{ app.user.username }}</span>
-                    <a class="btn btn-sm btn-outline-light" href="{{ url('legacy.logout.php') }}">Logout</a>
+                    <a class="btn btn-sm btn-outline-light" href="{{ url('logout') }}">Logout</a>
                 {% else %}
-                    <a class="btn btn-sm btn-outline-light" href="{{ url('legacy.login.php') }}">Login</a>
+                    <a class="btn btn-sm btn-outline-light" href="{{ url('login') }}">Login</a>
                 {% endif %}
             </div>
         </nav>

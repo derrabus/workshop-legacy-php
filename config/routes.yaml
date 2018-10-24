@@ -1,3 +1,6 @@
+logout:
+    path: /logout.php
+
 legacy:
     type: service
     resource: legacy.route_provider:getRoutes
