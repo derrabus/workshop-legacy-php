@@ -11,6 +11,8 @@
     ],
     "require": {
         "php": "^7.2",
+        "doctrine/doctrine-bundle": "^1.9",
+        "doctrine/orm": "^2.6",
         "pear/db": "^1.9",
         "symfony/console": "^4.1",
         "symfony/flex": "^1.1",
