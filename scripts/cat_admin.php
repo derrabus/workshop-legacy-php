@@ -4,8 +4,6 @@ global $container;
 
 use Doctrine\DBAL\FetchMode;
 
-require 'auth.php';
-
 $connection = $container->get('doctrine.dbal.default_connection');
 
 ?>
