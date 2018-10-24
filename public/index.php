@@ -40,34 +40,26 @@ $kernel = new Kernel($env, $debug);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 
-if (Response::HTTP_NOT_FOUND === $response->getStatusCode()) {
-    $targetFile = empty($_SERVER['REDIRECT_URL']) ? '/index.php' : $_SERVER['REDIRECT_URL'];
-    if ($targetFile === '/') {
-        $targetFile = '/index.php';
-    }
-    if (file_exists(SCRIPTS_DIR.$targetFile)) {
-        $_SERVER['PHP_SELF'] = $targetFile;
+if (Response::HTTP_NOT_FOUND === $response->getStatusCode() && $request->attributes->has('script')) {
+    extract($_REQUEST);
+    extract($_SERVER);
 
-        extract($_REQUEST);
-        extract($_SERVER);
+    $HTTP_GET_VARS = $_GET;
+    $HTTP_POST_VARS = $_POST;
+    $HTTP_COOKIE_VARS = $_COOKIE;
 
-        $HTTP_GET_VARS = $_GET;
-        $HTTP_POST_VARS = $_POST;
-        $HTTP_COOKIE_VARS = $_COOKIE;
+    chdir(SCRIPTS_DIR);
 
-        chdir(SCRIPTS_DIR);
+    ini_set('error_reporting', E_ALL & ~E_STRICT & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED);
+    header('Content-Type: text/html; charset=utf-8');
 
-        ini_set('error_reporting', E_ALL & ~E_STRICT & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED);
-        header('Content-Type: text/html; charset=utf-8');
+    global $container;
 
-        global $container;
+    $container = $kernel->getContainer();
 
-        $container = $kernel->getContainer();
+    require SCRIPTS_DIR.'/'.$request->attributes->get('script');
 
-        require SCRIPTS_DIR.$targetFile;
-
-        exit;
-    }
+    exit;
 }
 
 $response->send();
