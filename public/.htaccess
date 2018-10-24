@@ -1,4 +1,4 @@
-DirectoryIndex app.php
+DirectoryIndex index.php
 
 RewriteEngine On
 
@@ -6,12 +6,9 @@ RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
 RewriteRule ^(.*) - [E=BASE:%1]
 
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
-RewriteRule ^app\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
-
-RewriteRule ^app\.php - [L]
+RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
 
 RewriteCond %{REQUEST_FILENAME} -f
-RewriteCond %{REQUEST_FILENAME} !^.+\.php$
 RewriteRule ^ - [L]
 
-RewriteRule ^ %{ENV:BASE}/app.php [L]
+RewriteRule ^ %{ENV:BASE}/index.php [L]

@@ -11,12 +11,37 @@
     ],
     "require": {
         "php": "^7.2",
-        "pear/db": "^1.9"
+        "pear/db": "^1.9",
+        "symfony/console": "^4.1",
+        "symfony/flex": "^1.1",
+        "symfony/framework-bundle": "^4.1",
+        "symfony/twig-bundle": "^4.1",
+        "symfony/yaml": "^4.1"
+    },
+    "require-dev": {
+        "symfony/dotenv": "^4.1"
     },
     "config": {
         "platform": {
             "php": "7.2.10"
         },
         "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
     }
 }
