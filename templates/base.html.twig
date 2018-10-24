@@ -10,6 +10,17 @@
         {% endblock %}
     </head>
     <body>
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">BizDirectory</a>
+            <div>
+                {% if app.user %}
+                    <span class="navbar-text mx-3">👨‍💻 {{ app.user.username }}</span>
+                    <a class="btn btn-sm btn-outline-light" href="/logout.php">Logout</a>
+                {% else %}
+                    <a class="btn btn-sm btn-outline-light" href="/login.php">Login</a>
+                {% endif %}
+            </div>
+        </nav>
         <div class="container">
             {% block body %}{% endblock %}
         </div>

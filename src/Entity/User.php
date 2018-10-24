@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="users")
  * @ORM\Entity
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var string|null
@@ -60,5 +61,21 @@ class User
     public function setIsAdmin(bool $isAdmin): void
     {
         $this->isAdmin = $isAdmin;
+    }
+
+    public function getRoles()
+    {
+        return $this->isAdmin
+            ? ['ROLE_ADMIN']
+            : ['ROLE_USER'];
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function eraseCredentials()
+    {
     }
 }

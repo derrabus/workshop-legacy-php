@@ -4,8 +4,6 @@ use Doctrine\DBAL\FetchMode;
 
 global $container;
 
-session_start();
-
 $connection = $container->get('doctrine.dbal.default_connection');
 
 ?>

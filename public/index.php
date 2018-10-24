@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 require __DIR__.'/../vendor/autoload.php';
 
 define('SCRIPTS_DIR', dirname(__DIR__).'/scripts');
+session_start();
 
 // The check is to ensure we don't use .env in production
 if (!isset($_SERVER['APP_ENV']) && !isset($_ENV['APP_ENV'])) {

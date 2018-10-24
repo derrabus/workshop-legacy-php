@@ -10,7 +10,6 @@ if ($_POST['username'] && $_POST['password']) {
     $row = $connection->fetchArray($sql, [$_POST['username']]);
 
     if ($row && $row[1] === md5($_POST['password'])) {
-        session_start();
         $_SESSION['username'] = $row[0];
         $_SESSION['is_admin'] = (bool) $row[2];
 
