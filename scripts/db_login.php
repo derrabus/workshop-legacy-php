@@ -2,10 +2,10 @@
 
 // database connection setup section
 
-$username = 'user';
-$password = 'seekrit';
-$hostspec = 'localhost';
-$database = 'phpbook';
+$username = getenv('DATABASE_USERNAME');
+$password = getenv('DATABASE_PASSWORD');
+$hostspec = getenv('DATABASE_HOST');
+$database = getenv('DATABASE_NAME');
 $phptype = 'mysqli';
 
 $dsn = "$phptype://$username:$password@$hostspec/$database";
