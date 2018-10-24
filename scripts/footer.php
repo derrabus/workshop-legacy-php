@@ -1,14 +1,22 @@
+<?php
+
+global $container;
+
+$authorizationChecker = $container->get('security.authorization_checker');
+$router = $container->get('router');
+
+?>
 <hr />
 <p>
-    <a href="/">Home</a> &mdash;
-<?php if (empty($_SESSION['username'])): ?>
-    <a href="login.php">Login</a>
+    <a href="<?= $router->generate('legacy.home') ?>">Home</a> &mdash;
+<?php if (!$authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')): ?>
+    <a href="<?= $router->generate('legacy.login.php') ?>">Login</a>
 <?php else: ?>
-    <?php if (!empty($_SESSION['is_admin'])): ?>
-    <a href="cat_admin.php">Manage categories</a> &mdash;
-    <a href="biz_admin.php">Add business</a> &mdash;
+    <?php if ($authorizationChecker->isGranted('ROLE_ADMIN')): ?>
+    <a href="<?= $router->generate('legacy.cat_admin.php') ?>">Manage categories</a> &mdash;
+    <a href="<?= $router->generate('legacy.biz_admin.php') ?>">Add business</a> &mdash;
     <?php endif; ?>
-    Logged in as <?= $_SESSION['username'] ?>
-    (<a href="logout.php">Logout</a>)
+    Logged in as <?= $container->get('security.token_storage')->getToken()->getUsername() ?>
+    (<a href="<?= $router->generate('legacy.logout.php') ?>">Logout</a>)
 <?php endif; ?>
 </p>
