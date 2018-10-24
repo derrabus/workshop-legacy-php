@@ -59,6 +59,10 @@ if (Response::HTTP_NOT_FOUND === $response->getStatusCode()) {
         ini_set('error_reporting', E_ALL & ~E_STRICT & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED);
         header('Content-Type: text/html; charset=utf-8');
 
+        global $container;
+
+        $container = $kernel->getContainer();
+
         require SCRIPTS_DIR.$targetFile;
 
         exit;

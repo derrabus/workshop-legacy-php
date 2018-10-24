@@ -1,6 +1,12 @@
 <?php
 
+use Doctrine\DBAL\FetchMode;
+
+global $container;
+
 session_start();
+
+$connection = $container->get('doctrine.dbal.default_connection');
 
 ?>
 <html>
@@ -18,9 +24,6 @@ session_start();
 </h1>
 
 <?php
-// establish the database connection
-
-require_once('db_login.php');
 
 $pick_message = 'Click on a category to find business listings:';
 ?>
@@ -33,10 +36,10 @@ $pick_message = 'Click on a category to find business listings:';
                     <?php
                     // build the scrolling pick list for the categories
                     $sql = "SELECT * FROM categories";
-                    $result = $db->query($sql);
-                    if (DB::isError($result)) die($result->getMessage( ));
-                    while ($row = $result->fetchRow( )){
-                        if (DB::isError($row)) die($row->getMessage( ));
+                    $result = $connection->executeQuery($sql);
+                    $result->setFetchMode(FetchMode::NUMERIC);
+
+                    foreach ($result as $row) {
                         echo '<tr><td class="formlabel">';
                         echo "<a href=\"$PHP_SELF?cat_id=$row[0]\">";
                         echo "$row[1]</a></td></tr>\n";
@@ -56,12 +59,11 @@ $pick_message = 'Click on a category to find business listings:';
                 <?php
                 if ($cat_id) {
                     $sql = "SELECT b.* FROM businesses b, biz_categories bc where";
-                    $sql .= " bc.category_id = '$cat_id'";
+                    $sql .= " bc.category_id = ?";
                     $sql .= " and b.business_id = bc.business_id";
-                    $result = $db->query($sql);
-                    if (DB::isError($result)) die($result->getMessage( ));
-                    while ($row = $result->fetchRow( )){
-                        if (DB::isError($row)) die($row->getMessage( ));
+                    $result = $connection->executeQuery($sql, [$cat_id]);
+                    $result->setFetchMode(FetchMode::NUMERIC);
+                    foreach ($result as $row){
                         if ($color == 1) {
                             $bg_shade = 'dark';
                             $color = 0;

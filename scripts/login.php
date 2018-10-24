@@ -1,15 +1,13 @@
 <?php
 
-require_once('db_login.php');
+global $container;
 
 $error = '';
 
 if ($_POST['username'] && $_POST['password']) {
-    $sql = 'SELECT username, password, is_admin FROM users WHERE username = \'' . $_POST['username'] . '\'';
-    $result = $db->query($sql);
-    if (DB::isError($result)) die($result->getMessage( ));
-
-    $row = $result->fetchRow( );
+    $connection = $container->get('doctrine.dbal.default_connection');
+    $sql = 'SELECT username, password, is_admin FROM users WHERE username = ?';
+    $row = $connection->fetchArray($sql, [$_POST['username']]);
 
     if ($row && $row[1] === md5($_POST['password'])) {
         session_start();

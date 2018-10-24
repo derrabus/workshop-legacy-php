@@ -1,6 +1,12 @@
 <?php
 
+global $container;
+
+use Doctrine\DBAL\FetchMode;
+
 require 'auth.php';
+
+$connection = $container->get('doctrine.dbal.default_connection');
 
 ?>
 <html>
@@ -18,7 +24,6 @@ require 'auth.php';
 </h1>
 
 <?php
-require_once('db_login.php');
 
 // fetch query parameters
 $add_record = $_REQUEST['add_record'];
@@ -38,14 +43,9 @@ if ($add_record == 1) {
     $sql  = 'INSERT INTO businesses (name, address, city, telephone, ';
     $sql .= ' url) VALUES (?, ?, ?, ?, ?)';
     $params = array($Biz_Name, $Biz_Address, $Biz_City, $Biz_Telephone, $Biz_URL);
-    $query = $db->prepare($sql);
-    if (DB::isError($query)) die($query->getMessage( ));
-    $resp = $db->execute($query, $params);
-    if (DB::isError($resp)) die($resp->getMessage( ));
-    $resp = $db->commit( );
-    if (DB::isError($resp)) die($resp->getMessage( ));
+    $resp = $connection->executeUpdate($sql, $params);
     echo '<P CLASS="message">Record inserted as shown below.</P>';
-    $biz_id = $db->getOne('SELECT max(business_id) FROM businesses');
+    $biz_id = $connection->lastInsertId();
 }
 ?>
 
@@ -57,10 +57,9 @@ if ($add_record == 1) {
                         <?php
                         // build the scrolling pick list for the categories
                         $sql = "SELECT * FROM categories";
-                        $result = $db->query($sql);
-                        if (DB::isError($result)) die($result->getMessage( ));
-                        while ($row = $result->fetchRow( )){
-                            if (DB::isError($row)) die($row->getMessage( ));
+                        $result = $connection->executeQuery($sql);
+                        $result->setFetchMode(FetchMode::NUMERIC);
+                        foreach ($result as $row){
                             if ($add_record == 1){
                                 $selected = false;
                                 // if this category was selected, add a new biz_categories row
@@ -69,12 +68,7 @@ if ($add_record == 1) {
                                     $sql .= ' (business_id, category_id)';
                                     $sql .= ' VALUES (?, ?)';
                                     $params = array($biz_id, $row[0]);
-                                    $query = $db->prepare($sql);
-                                    if (DB::isError($query)) die($query->getMessage( ));
-                                    $resp = $db->execute($query, $params);
-                                    if (DB::isError($resp)) die($resp->getMessage( ));
-                                    $resp = $db->commit( );
-                                    if (DB::isError($resp)) die($resp->getMessage( ));
+                                    $resp = $connection->executeUpdate($sql, $params);
                                     echo "<option selected>$row[1]</option>\n";
                                     $selected = true;
                                 }

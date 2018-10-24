@@ -1,14 +1,16 @@
 <?php
 
+global $container;
+
+use Doctrine\DBAL\FetchMode;
+
 require 'auth.php';
+
+$connection = $container->get('doctrine.dbal.default_connection');
 
 ?>
 <html>
 <head>
-    <?php
-    require_once('db_login.php');
-    ?>
-
     <title>
         <?php
         // print the window title and the topmost body heading
@@ -42,10 +44,8 @@ $len_cat_de = strlen($_REQUEST['Cat_Desc']);
 // called by the Add Category button
 if ($add_record == 1) {
     if (($len_cat_id > 0) and ($len_cat_tl > 0) and ($len_cat_de > 0)){
-        $sql  = "insert into categories (category_id, title, description)";
-        $sql .= " values ('$Cat_ID', '$Cat_Title', '$Cat_Desc')";
-        $result = $db->query($sql);
-        $db->commit( );
+        $sql  = 'insert into categories (category_id, title, description) values (?, ?, ?)';
+        $connection->executeUpdate($sql, [$Cat_ID, $Cat_Title, $Cat_Desc]);
     } else {
         echo "<p>Please make sure all fields are filled in ";
         echo "and try again.</p>\n";
@@ -57,7 +57,8 @@ if ($add_record == 1) {
 // query all records in the table after any
 // insertion that may have occurred above
 $sql = "select * from categories";
-$result = $db->query($sql);
+$result = $connection->executeQuery($sql);
+$result->setFetchMode(FetchMode::NUMERIC);
 ?>
 
 <form method="POST" action="cat_admin.php">
@@ -71,7 +72,7 @@ $result = $db->query($sql);
         <?php
         // display any records fetched from the database
         // plus an input line for a new category
-        while ($row = $result->fetchRow( )){
+        foreach ($result as $row){
             echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td></tr>\n";
         }
         ?>
